@@ -15,7 +15,7 @@ class elasticsearch::install inherits elasticsearch {
 
   exec { 'install_deb':
     command => 'dpkg -i /usr/src/elasticsearch-0.19.1.deb',
-    require => Exec['get_deb'],
+    require => [ Exec['get_deb'], Class['java'] ],
     unless  => 'dpkg -s elasticsearch | grep -q 0.19'
   }
 }
