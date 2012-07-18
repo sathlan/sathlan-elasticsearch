@@ -5,7 +5,7 @@ class elasticsearch::install inherits elasticsearch {
     distribution => 'sun-jre'
   }
   Exec {
-    path => '/usr/bin:/usr/sbin:/bin:/usr/local/bin, '
+    path => [ '/bin', '/sbin' , '/usr/bin', '/usr/sbin' ],
   }
   exec { 'get_deb':
     command => 'curl -L -O https://github.com/downloads/elasticsearch/elasticsearch/elasticsearch-0.19.1.deb',
@@ -14,7 +14,7 @@ class elasticsearch::install inherits elasticsearch {
   }
 
   exec { 'install_deb':
-    command => 'dpkg -i /usr/src/elasticsearch-0.19.1.deb',
+    command => 'dpkg --force-confold -i /usr/src/elasticsearch-0.19.1.deb',
     require => [ Exec['get_deb'], Class['java'] ],
     unless  => 'dpkg -s elasticsearch | grep -q 0.19'
   }
